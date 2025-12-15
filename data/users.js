@@ -35,5 +35,27 @@ module.exports = [
         username: 'visual_user',
         password: 'secret_sauce',
         shouldLogin: true
-    }
+    },
+    {
+        role: 'Invalid user',
+        username: 'standard_user_user',
+        password: 'secret_sauce',
+        shouldLogin: false ,
+        error: 'Epic sadface: Username and password do not match any user in this service'
+    },
+    {
+        role: 'No username',
+        username: '',
+        password: 'secret_sauce',
+        shouldLogin: false ,
+        error: 'Epic sadface: Username is required'
+    },
+
+    {
+        role: 'No password',
+        username: 'standard_user',
+        password: '',
+        shouldLogin: false ,
+        error: 'Epic sadface: Password is required'
+    },
 ];

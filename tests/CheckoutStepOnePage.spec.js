@@ -4,6 +4,13 @@ const { ProductsPage } = require('../pages/ProductsPage');
 const { ShoppingCartPage } = require('../pages/ShoppingCartPage');
 const { CheckoutStepOnePage } = require('../pages/CheckoutStepOnePage');
 
+const requiredFields = [
+  { field: 'firstName', value: '', error: 'Error: First Name is required' },
+  { field: 'lastName', value: '', error: 'Error: Last Name is required' },
+  { field: 'zipcode', value: '', error: 'Error: Postal Code is required' },
+];
+
+
 // Before each test on Checkout Step One page: Login and Open shoppingCart 
 test.beforeEach(async ({ page }) => {
     const login = new LoginPage(page);
