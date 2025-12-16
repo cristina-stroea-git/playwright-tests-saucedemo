@@ -29,12 +29,18 @@ class CheckoutStepOnePage {
         await this.page.locator(this.zipcodeInput).fill(zipcodeValue);
     }
 
-    async fillCheckoutForm(first, last , zipcode){
-        await this.page.locator(this.firstNameInput).fill(first);
-        await this.page.locator(this.lastNameInput).fill(last);
-        await this.page.locator(this.zipcodeInput).fill(zipcode);
-
+    async fillCheckoutForm(first, last, zipcode) {
+        if (first !== undefined) {
+            await this.page.locator(this.firstNameInput).fill(first);
+        }
+        if (last !== undefined) {
+            await this.page.locator(this.lastNameInput).fill(last);
+        }
+        if (zipcode !== undefined) {
+            await this.page.locator(this.zipcodeInput).fill(zipcode);
+        }
     }
+
 
     async cancelCheckout(){
         await this.page.locator(this.cancelCheckoutButton).click();

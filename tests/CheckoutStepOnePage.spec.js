@@ -4,14 +4,9 @@ const { ProductsPage } = require('../pages/ProductsPage');
 const { ShoppingCartPage } = require('../pages/ShoppingCartPage');
 const { CheckoutStepOnePage } = require('../pages/CheckoutStepOnePage');
 
-const requiredFields = [
-  { field: 'firstName', value: '', error: 'Error: First Name is required' },
-  { field: 'lastName', value: '', error: 'Error: Last Name is required' },
-  { field: 'zipcode', value: '', error: 'Error: Postal Code is required' },
-];
+const checkoutsteponedata = require('../data/checkoutStepOne');
 
 
-// Before each test on Checkout Step One page: Login and Open shoppingCart 
 test.beforeEach(async ({ page }) => {
     const login = new LoginPage(page);
    
@@ -57,61 +52,27 @@ test('Saucedemo - CheckoutStepOne page - cancel checkout redirects to Shopping c
     await expect(page).toHaveURL(/cart/);
 });
 
-test('Saucedemo - CheckoutStepOne page - first name is required', async ({ page }) => {
-    const products = new ProductsPage(page);
-    const shoppingCart = new ShoppingCartPage(page);
-    const checkoutStepOne = new CheckoutStepOnePage(page);
-
-    await products.openShoppingCartPage();
-    await shoppingCart.proceedToCheckout();
-
-    // url is correct:
-    await expect(page).toHaveURL(/checkout-step-one/);
-    await checkoutStepOne.continueCheckout();
-    const errorMsg = await checkoutStepOne.checkoutErrorMessage();
-    console.log(errorMsg);
-    await expect (errorMsg).toEqual('Error: First Name is required');
-});
 
 
-test('Saucedemo - CheckoutStepOne page - last name is required', async ({ page }) => {
-    const products = new ProductsPage(page);
-    const shoppingCart = new ShoppingCartPage(page);
-    const checkoutStepOne = new CheckoutStepOnePage(page);
+for (const checkout of checkoutsteponedata){            
+    test(`Saucedemo - CheckoutStepOne page - ${checkout.scenario} `, async ({ page }) => {
+        const products = new ProductsPage(page);
+        const shoppingCart = new ShoppingCartPage(page);
+        const checkoutStepOne = new CheckoutStepOnePage(page);
 
-    await products.openShoppingCartPage();
-    await shoppingCart.proceedToCheckout();
+        await products.openShoppingCartPage();
+        await shoppingCart.proceedToCheckout();
 
-    // url is correct:
-    await expect(page).toHaveURL(/checkout-step-one/);
-    await checkoutStepOne.fillFirstName('Cristina');
-    await checkoutStepOne.continueCheckout();
-    const errorMsg = await checkoutStepOne.checkoutErrorMessage();
-    console.log(errorMsg);
-    await expect (errorMsg).toEqual('Error: Last Name is required');
-});
+        // url is correct:
+        await expect(page).toHaveURL(/checkout-step-one/);
+        await checkoutStepOne.fillCheckoutForm(checkout.firstName , checkout.lastName , checkout.zip);
+        await checkoutStepOne.continueCheckout();
 
+        await expect (page.locator(checkoutStepOne.errorMsg)).toHaveText(checkout.error);
+        
+    });
 
-
-test('Saucedemo - CheckoutStepOne page - zip code is required', async ({ page }) => {
-    const products = new ProductsPage(page);
-    const shoppingCart = new ShoppingCartPage(page);
-    const checkoutStepOne = new CheckoutStepOnePage(page);
-
-    await products.openShoppingCartPage();
-    await shoppingCart.proceedToCheckout();
-
-    // url is correct:
-    await expect(page).toHaveURL(/checkout-step-one/);
-    await checkoutStepOne.fillFirstName('Cristina');
-    await checkoutStepOne.fillLastName('Stroea');
-    await checkoutStepOne.continueCheckout();
-    const errorMsg = await checkoutStepOne.checkoutErrorMessage();
-    console.log(errorMsg);
-    await expect (errorMsg).toEqual('Error: Postal Code is required');
-});
-
-
+}
 test('Saucedemo - CheckoutStepOne page - continue redirects to checkout step two page', async ({ page }) => {
     const products = new ProductsPage(page);
     const shoppingCart = new ShoppingCartPage(page);
@@ -127,3 +88,5 @@ test('Saucedemo - CheckoutStepOne page - continue redirects to checkout step two
     
     await expect(page).toHaveURL(/checkout-step-two/);
 });
+
+

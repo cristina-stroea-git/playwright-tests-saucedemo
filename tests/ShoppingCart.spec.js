@@ -4,6 +4,7 @@ const { ProductsPage } = require('../pages/ProductsPage');
 const { ShoppingCartPage } = require('../pages/ShoppingCartPage');
 
 
+
 test('Saucedemo - ShoppingCart page is loaded properly', async ({ page }) => {
     const login = new LoginPage(page);
     const products = new ProductsPage(page);
